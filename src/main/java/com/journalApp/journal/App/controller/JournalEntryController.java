@@ -1,44 +1,40 @@
 package com.journalApp.journal.App.controller;
 
 import com.journalApp.journal.App.entity.JournalEntry;
-import com.journalApp.journal.App.repository.JournalEntryRepository;
-import com.journalApp.journal.App.service.JournalEntryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class JournalEntryControllerV2 {
+@RestController
+@RequestMapping("/journal")
+public class JournalEntryController {
 
-    @Autowired
-    private JournalEntryService journalEntryService;
+    private Map<Long, JournalEntry> journalEntries = new HashMap<Long, JournalEntry>(); //Since we've no DB so we're using map to store data
+
     @GetMapping //GET:localhost:8080/journal
     public List<JournalEntry> getAll(){
-        return null;
+        return new ArrayList<>(journalEntries.values());
     }
-
 
     @PostMapping //POST:localhost:8080/journal
     public boolean createEntry(@RequestBody JournalEntry entry){//req converted to object
-        journalEntryService.saveEntry(entry);
+        journalEntries.put(entry.getId(), entry);
         return true;
     }
 
     @GetMapping("id/{myId}")
     public JournalEntry getJournalEntryById(@PathVariable Long myId){
-        return null;
+        return journalEntries.get(myId);
     }
 
     @DeleteMapping("id/{myId}")
     public JournalEntry deleteJournalEntryById(@PathVariable long myId){
-        return null;
+        return journalEntries.remove(myId);
     }
 
-    @PutMapping("id/{myId}" + "")
+    @PutMapping("id/{myId}" +
+            "")
     public JournalEntry updateJournalEntryByid(@PathVariable long myId, @PathVariable JournalEntry entry){
-        return null;
+        return journalEntries.put(myId, entry);
     }
 }
